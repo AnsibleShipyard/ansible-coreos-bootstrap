@@ -2,19 +2,39 @@
 
 set -e
 
-if [-e $HOME/.bootstrapped]; then
+if [ -e $HOME/.bootstrapped ]; then
   exit 0
 fi
 
 PYPY_VERSION=2.4.0
 
+if [ -e $HOME/pypy ]; then
+  rm -R $HOME/pypy*
+fi
+
+if [ -e pypy-$PYPY_VERSION-linux64.tar.bz2 ]; then
+  rm pypy-$PYPY_VERSION-linux64.tar.bz2
+fi;
+
+if [ -e pypy-$PYPY_VERSION-linux64 ]; then
+  rm -R pypy-$PYPY_VERSION-linux64
+fi;
+
 wget https://bitbucket.org/pypy/pypy/downloads/pypy-$PYPY_VERSION-linux64.tar.bz2
 tar -xf pypy-$PYPY_VERSION-linux64.tar.bz2
-ln -s pypy-$PYPY_VERSION-linux64 pypy
+ln -sf pypy-$PYPY_VERSION-linux64 pypy
 
 ## library fixup
-mkdir pypy/lib
-ln -s /lib64/libncurses.so.5.9 $HOME/pypy/lib/libtinfo.so.5
+if [ ! -e $HOME/pypy/lib ]; then 
+  mkdir -p $HOME/pypy/lib
+fi;
+
+if [ ! -e /lib64/libncurses.so.5.9 ]; then
+  echo "Could not find libncurses.so.5.9"
+  exit 0
+fi;
+
+ln -sf /lib64/libncurses.so.5.9 $HOME/pypy/lib/libtinfo.so.5
 
 mkdir -p $HOME/bin
 
