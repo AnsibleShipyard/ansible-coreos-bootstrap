@@ -1,14 +1,21 @@
 # coreos-bootstrap
 
+Note: This was originally forked from defunctzombie.coreos-bootstrap.
+
 In order to effectively run ansible, the target machine needs to have a python interpreter. Coreos machines are minimal and do not ship with any version of python. To get around this limitation we can install [pypy](http://pypy.org/), a lightweight python interpreter. The coreos-bootstrap role will install pypy for us and we will update our inventory file to use the installed python interpreter.
 
-# install
+## Install
+
+It is recommended that you clone this repo and refer to it under a roles
+directory.
+
+## Install via galaxy
 
 ```
-ansible-galaxy install defunctzombie.coreos-bootstrap
+ansible-galaxy install ansible-coreos-bootstrap
 ```
 
-# Configure your project
+## Configure your project
 
 Unlike a typical role, you need to configure Ansible to use an alternative python interpreter for coreos hosts. This can be done by adding a `coreos` group to your inventory file and setting the group's vars to use the new python interpreter. This way, you can use ansible to manage CoreOS and non-CoreOS hosts. Simply put every host that has CoreOS into the `coreos` inventory group and it will automatically use the specified python interpreter.
 ```
@@ -31,7 +38,7 @@ Now you can simply add the following to your playbook file and include it in you
 - hosts: coreos
   gather_facts: False
   roles:
-    - defunctzombie.coreos-bootstrap
+    - ansible-coreos-bootstrap
 ```
 
 Make sure that `gather_facts` is set to false, otherwise ansible will try to first gather system facts using python which is not yet installed!
